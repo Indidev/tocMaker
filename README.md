@@ -25,7 +25,7 @@ Your table of content will be created before the first headline which starts wit
 
 **Attention:** It is recommended to delete the old table of content before using the tool, automated deletion is not yet implemented.
 
-## Example 2eadline
+## Example Headline
 here could be some text
 ### subitem1
 ### subitem2
