@@ -34,9 +34,11 @@ int buffSize;
 int buffEnd;
 
 int main(int argc, char** argv) {
+	links = malloc(sizeof(char*));
 	linksize = 1;
 	linksEnd = 0;
 
+	outputBuffer = malloc(sizeof(char*));
 	buffSize = 1;
 	buffEnd = 0;
 
