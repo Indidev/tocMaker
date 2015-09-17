@@ -2,9 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-
-#define true 1
-#define false 0
+#include <stdbool.h>
 
 //Declare Functions
 int isHeadline(char* line);
