@@ -34,12 +34,9 @@ int buffSize;
 int buffEnd;
 
 int main(int argc, char** argv) {
-
-	links = malloc(sizeof(char*));
 	linksize = 1;
 	linksEnd = 0;
 
-	outputBuffer = malloc(sizeof(char*));
 	buffSize = 1;
 	buffEnd = 0;
 
@@ -133,7 +130,7 @@ int isHeadline(char* line) {
 }
 
 char* getName(char* headline) {
-	char* name = malloc(strlen(headline));
+	char* name = malloc(strlen(headline) + 1);
 	strcpy(name, headline);
 	removeNeedle(name, '#');
 	trim(name);
