@@ -74,7 +74,7 @@ int main(int argc, char** argv) {
 
 			//cwrite file and create table of content
 			file = freopen(filePath, "w", file);
-			printf("test1\n");
+
 			//skip initial headline
 			int i = 0;
 			while (i < buffEnd && (strlen(outputBuffer[i]) < 2
@@ -82,7 +82,6 @@ int main(int argc, char** argv) {
 				fprintf(file, "%s\n", outputBuffer[i]);
 				i++;
 			}
-			printf("test2\n");
 
 			//crate toc
 			fprintf(file, "## Table of Content\n\n");
