@@ -7,7 +7,7 @@ The following table of content is created by this tool:
 
    * [Installation](#installation)
    * [Usage Info](#usage-info)
-   * [Example 2eadline](#example-2eadline)
+   * [Example Headline](#example-headline)
      * [subitem1](#subitem1)
      * [subitem2](#subitem2)
    * [Example Headline 2](#example-headline-2)
