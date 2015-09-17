@@ -15,7 +15,7 @@ The following table of content is created by this tool:
      * [subitem2](#subitem2_1)
 
 ## Installation
-	just use ```make```
+just use ```make```
 
 ## Usage Info
 To create a table of content use ```tocMaker <pathToYourReadme>```
