@@ -176,7 +176,7 @@ char* getLink(char* name) {
 	int counter = 1;
 	char buf[5];
 	while (hasItem(link)) {
-		sprintf(buf, "_%d%c", counter++, '\0');
+		sprintf(buf, "-%d%c", counter++, '\0');
 		strcpy(link + linksEnd, buf);
 	}
 

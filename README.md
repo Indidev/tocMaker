@@ -12,8 +12,8 @@ The following table of contents is created by this tool:
      * [subitem1](#subitem1)
      * [subitem2](#subitem2)
    * [Example Headline 2](#example-headline-2)
-     * [subitem1](#subitem1_1)
-     * [subitem2](#subitem2_1)
+     * [subitem1](#subitem1-1)
+     * [subitem2](#subitem2-1)
 
 <!-- [toc] -->
 ## Installation
