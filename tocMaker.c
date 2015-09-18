@@ -2,9 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-
-#define true 1
-#define false 0
+#include <stdbool.h>
 
 //Declare Functions
 int isHeadline(char* line);
@@ -36,7 +34,6 @@ int buffSize;
 int buffEnd;
 
 int main(int argc, char** argv) {
-
 	links = malloc(sizeof(char*));
 	linksize = 1;
 	linksEnd = 0;
@@ -135,7 +132,7 @@ int isHeadline(char* line) {
 }
 
 char* getName(char* headline) {
-	char* name = malloc(strlen(headline));
+	char* name = malloc(strlen(headline) + 1);
 	strcpy(name, headline);
 	removeNeedle(name, '#');
 	trim(name);

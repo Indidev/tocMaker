@@ -1,6 +1,8 @@
-SRC	=tocMaker.c
-CC	=/usr/bin/gcc
-CFLAGS	=-Wall -std=c99
+CFLAGS	=-Wall -g -std=c99
 
-tocMaker: $(SRC)
-	$(CC) $(CFLAGS) $(SRC) -o tocMaker
+tocMaker: tocMaker.c
+
+all: tocMaker
+
+clean:
+	$(RM) tocMaker
