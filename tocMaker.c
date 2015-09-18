@@ -4,6 +4,8 @@
 #include <unistd.h>
 #include <stdbool.h>
 
+#define TOC_LIMITER  "<!-- [toc] -->"
+
 //Declare Functions
 int isHeadline(char* line);
 char* getName(char* headline);
@@ -15,13 +17,14 @@ void removeNeedle(char* str, char needle);
 void removeNeedles(char* str, char* needle);
 
 void addLink(char* str);
-char hasItem(char* str);
+int hasItem(char* str);
 void cleanupLinks();
 void toLower(char* str);
 
 void appendBuf(char* str);
 void cleanupBuffer();
 int readLine(FILE *file, char* buffer, int maxSize);
+int isEmptyLine(char* str);
 
 //declare variables for a link-list
 char** links;
@@ -45,7 +48,7 @@ int main(int argc, char** argv) {
 	char cwd[1024];
 	char* filePath = NULL;
 	if (getcwd(cwd, sizeof(cwd)) != NULL && argc > 1) {
-		//check if absolut or relative path of file is given
+		//check if absolute or relative path of file is given
 		if (argv[1][0] != '/') {
 			filePath = malloc(strlen(cwd) + strlen(argv[1]) + 2);
 			sprintf(filePath, "%s/%s%c", cwd, argv[1], '\0');
@@ -65,11 +68,21 @@ int main(int argc, char** argv) {
 
 			//read file
 			char lineBuffer[1024];
+			bool skip = false;
 			while (readLine(file, lineBuffer, 1024)) {
-				appendBuf(lineBuffer);
+				//skip table of content
+				if (skip) {
+					skip = strcmp(lineBuffer, TOC_LIMITER);
+				} else {
+					if  (strcmp(lineBuffer, TOC_LIMITER)) {
+						appendBuf(lineBuffer);
+					} else {
+						skip = true;
+					}
+				}
 			}
 
-			//cwrite file and create table of content
+			//write file and create table of content
 			file = freopen(filePath, "w", file);
 
 			//skip initial headline
@@ -80,8 +93,14 @@ int main(int argc, char** argv) {
 				i++;
 			}
 
-			//crate toc
-			fprintf(file, "## Table of Content\n\n");
+			//create toc:
+			
+			//check if an empty line is present and insert if not
+			if (!isEmptyLine(outputBuffer[i - 1]))
+				fprintf(file, "\n");
+			
+			fprintf(file, "%s\n", TOC_LIMITER);
+			fprintf(file, "## Table of Contents\n\n");
 			for (int index = i; index < buffEnd; index++) {
 				char* topic = createTopic(outputBuffer[index]);
 				if (topic) {
@@ -89,7 +108,7 @@ int main(int argc, char** argv) {
 					free(topic);
 				}
 			}
-			fprintf(file, "\n");
+			fprintf(file, "\n%s\n", TOC_LIMITER);
 
 			//write the rest to the file
 			while (i < buffEnd) {
@@ -102,7 +121,7 @@ int main(int argc, char** argv) {
 			printf("Error: could not open file\n");
 		}
 	} else {
-		printf("Error: %s\n", argc < 2?"need a README file":"filepath is to lang");
+		printf("Error: %s\n", argc < 2?"need a README file":"filepath is too long");
 	}
 
 	if (filePath)
@@ -152,7 +171,7 @@ char* getLink(char* name) {
 	free(tmpName);
 	toLower(link);
 
-	//check if link-name is allready in use and modify if necessary
+	//check if link-name is already in use and modify if necessary
 	int linksEnd = strlen(link);
 	int counter = 1;
 	char buf[5];
@@ -237,7 +256,7 @@ void addLink(char* str) {
 	links[linksEnd++] = str;
 }
 
-char hasItem(char* str) {
+int hasItem(char* str) {
 	for (int i = 0; i < linksEnd; i++)
 		if (!strcmp(links[i], str))
 			return true;
@@ -249,7 +268,7 @@ void toLower(char* str) {
 	for (;*str ; str++)
 		if (*str > 64 && *str < 91)
 			*str += 32;
-			//should implement umlauts here
+			//TODO: should implement umlauts here
 }
 
 void cleanupLinks() {
@@ -275,4 +294,12 @@ void cleanupBuffer() {
 	for (int i = 0; i < buffEnd; i++)
 		free(outputBuffer[i]);
 	free(outputBuffer);
+}
+
+int isEmptyLine(char* str) {
+	for ( ; *str; str++) {
+		if ((unsigned char) *str > 32)
+			return false;
+	}
+	return true;
 }
