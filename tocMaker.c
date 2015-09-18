@@ -161,7 +161,9 @@ char* getName(char* headline) {
 char* getLink(char* name) {
 	char *tmpName = getName(name);
 	trim(tmpName);
-	removeNeedles(tmpName, "()[]{}&/\\$%<>?!\"§$=.:,;*+~@|^°");
+	//TODO: remove images
+	//TODO: not yet satisfying cause of multi-characters:
+	removeNeedles(tmpName, "()[]{}&/\\$%<>?!\"'§$=.:,;*+~@|^°´`");
 	replace(tmpName, ' ', '-');
 
   //allocate space (+2 for #  and \0, +3 for possible extensions like _1)
