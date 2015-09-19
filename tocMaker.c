@@ -9,7 +9,7 @@
 //Declare Functions
 int isHeadline(char* line);
 char* getName(char* headline);
-char* getLink(char* name);
+char* getLink(char* headline);
 char* createTopic(char* line);
 void trim(char* str);
 void replace(char* str, char oldChar, char newChar);
@@ -167,17 +167,26 @@ char* getName(char* headline) {
 	//remove images from name
 	char* ptr;
 	while ((ptr = strstr(name, "!["))) {
-		int n = (int) (strstr(ptr, ")") - ptr) + 1;
-		if (n > 0)
-			strRemove(ptr, 0, n);
+		char* end = strstr(ptr, ")");
+		if (end)
+			strRemove(ptr, 0, (int) (end - ptr) + 1);
+	}
+
+	//remove links
+	ptr = name;
+	while ((ptr = strstr(name, "["))) {
+		if (strstr(name, "]") == strstr(name, "](") && strstr(name, "]")) {
+			char* end = strstr(ptr, ")");
+			if (end)
+				strRemove(ptr, 0, (int) (end - ptr) + 1);
+		}
 	}
 
 	return name;
 }
 
-char* getLink(char* name) {
-	char *tmpName = getName(name);
-	trim(tmpName);
+char* getLink(char* headline) {
+	char *tmpName = getName(headline);
 
 	removeNeedles(tmpName, needles, 33);
 	replace(tmpName, ' ', '-');
@@ -207,7 +216,7 @@ char* createTopic(char* line) {
 	if (numHashtag) {
 		int numSpaces = 2 * numHashtag -1;
 		char *name = getName(line);
-		char *link = getLink(name);
+		char *link = getLink(line);
 		char *topic = malloc(strlen(name) + strlen(link) + numSpaces + 8);
 
 		for(int i = 0; i < numSpaces; i++)
