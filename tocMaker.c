@@ -37,6 +37,12 @@ char** outputBuffer;
 int buffSize;
 int buffEnd;
 
+char* needles[] = {"(", ")", "[", "]", "{", "}", "<", ">",
+									"!", "\"", "§", "$", "%", "&", "/", "=",
+									"?", "´", "`", "\\", "€", "@", "*", "+",
+									"~", "'", ",", ";", ".", ":", "^", "°",
+									"|"};
+
 int main(int argc, char** argv) {
 	links = malloc(sizeof(char*));
 	linksize = 1;
@@ -155,19 +161,24 @@ char* getName(char* headline) {
 	char* name = malloc(strlen(headline) + 1);
 	strcpy(name, headline);
 	removeNeedle(name, "#");
+
+	//remove images from name
+	char* ptr;
+	while ((ptr = strstr(name, "!["))) {
+		int n = (int) (strstr(ptr, ")") - ptr) + 1;
+		if (n > 0)
+			strRemove(ptr, 0, n);
+	}
+	
 	trim(name);
+
 	return name;
 }
 
 char* getLink(char* name) {
 	char *tmpName = getName(name);
 	trim(tmpName);
-	//TODO: remove images
-	char* needles[] = {"(", ")", "[", "]", "{", "}", "<", ">",
-										"!", "\"", "§", "$", "%", "&", "/", "=",
-										"?", "´", "`", "\\", "€", "@", "*", "+",
-										"~", "'", ",", ";", ".", ":", "^", "°",
-										"|"};
+
 	removeNeedles(tmpName, needles, 33);
 	replace(tmpName, ' ', '-');
 
