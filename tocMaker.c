@@ -13,8 +13,8 @@ char* getLink(char* name);
 char* createTopic(char* line);
 void trim(char* str);
 void replace(char* str, char oldChar, char newChar);
-void removeNeedle(char* str, char needle);
-void removeNeedles(char* str, char* needle);
+void removeNeedle(char* str, char* needle);
+void removeNeedles(char* str, char** needle, int numNeedles);
 
 void addLink(char* str);
 int hasItem(char* str);
@@ -25,6 +25,7 @@ void appendBuf(char* str);
 void cleanupBuffer();
 int readLine(FILE *file, char* buffer, int maxSize);
 int isEmptyLine(char* str);
+void strRemove(char* str, int start, int n);
 
 //declare variables for a link-list
 char** links;
@@ -94,11 +95,11 @@ int main(int argc, char** argv) {
 			}
 
 			//create toc:
-			
+
 			//check if an empty line is present and insert if not
 			if (!isEmptyLine(outputBuffer[i - 1]))
 				fprintf(file, "\n");
-			
+
 			fprintf(file, "%s\n", TOC_LIMITER);
 			fprintf(file, "## Table of Contents\n\n");
 			for (int index = i; index < buffEnd; index++) {
@@ -153,7 +154,7 @@ int isHeadline(char* line) {
 char* getName(char* headline) {
 	char* name = malloc(strlen(headline) + 1);
 	strcpy(name, headline);
-	removeNeedle(name, '#');
+	removeNeedle(name, "#");
 	trim(name);
 	return name;
 }
@@ -162,8 +163,12 @@ char* getLink(char* name) {
 	char *tmpName = getName(name);
 	trim(tmpName);
 	//TODO: remove images
-	//TODO: not yet satisfying cause of multi-characters:
-	removeNeedles(tmpName, "()[]{}&/\\$%<>?!\"'§$=.:,;*+~@|^°´`");
+	char* needles[] = {"(", ")", "[", "]", "{", "}", "<", ">",
+										"!", "\"", "§", "$", "%", "&", "/", "=",
+										"?", "´", "`", "\\", "€", "@", "*", "+",
+										"~", "'", ",", ";", ".", ":", "^", "°",
+										"|"};
+	removeNeedles(tmpName, needles, 33);
 	replace(tmpName, ' ', '-');
 
   //allocate space (+2 for #  and \0, +3 for possible extensions like _1)
@@ -232,19 +237,25 @@ void replace(char* str, char oldChar, char newChar) {
 	}
 }
 
-void removeNeedle(char* str, char needle) {
-	char *ptr = strchr(str, needle);
-	while (ptr) {
-		for (int i = 0; i < strlen(ptr); i++)
-			ptr[i] = ptr[i + 1];
-
-		ptr = strchr(str, needle);
+void removeNeedle(char* str, char* needle) {
+	char *ptr;
+	while ((ptr = strstr(str, needle))) {
+		strRemove(ptr, 0, strlen(needle));
 	}
 }
 
-void removeNeedles(char* str, char* needles) {
-	for (int i = 0; i < strlen(needles); i++)
+void removeNeedles(char* str, char** needles, int numNeedles) {
+	for (int i = 0; i < numNeedles; i++)
 		removeNeedle(str, needles[i]);
+}
+
+void strRemove(char* str, int start, int n) {
+	if (start < strlen(str)) {
+		str += start;
+		for (int i = n; i <= strlen(str); i++) {
+			str[i - n] = str[i];
+		}
+	}
 }
 
 void addLink(char* str) {
