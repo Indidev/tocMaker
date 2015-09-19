@@ -162,6 +162,8 @@ char* getName(char* headline) {
 	strcpy(name, headline);
 	removeNeedle(name, "#");
 
+	trim(name);
+
 	//remove images from name
 	char* ptr;
 	while ((ptr = strstr(name, "!["))) {
@@ -169,8 +171,6 @@ char* getName(char* headline) {
 		if (n > 0)
 			strRemove(ptr, 0, n);
 	}
-	
-	trim(name);
 
 	return name;
 }
