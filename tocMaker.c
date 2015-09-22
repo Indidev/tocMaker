@@ -60,7 +60,7 @@ int main(int argc, char** argv) {
 			filePath = malloc(strlen(cwd) + strlen(argv[1]) + 2);
 			sprintf(filePath, "%s/%s%c", cwd, argv[1], '\0');
 		} else {
-			filePath = malloc(strlen(argv[1] + 1));
+			filePath = malloc(strlen(argv[1]) + 1);
 			strcpy(filePath, argv[1]);
 		}
 	}
