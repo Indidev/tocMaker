@@ -17,14 +17,14 @@ void removeNeedle(char* str, char* needle);
 void removeNeedles(char* str, char** needle, int numNeedles);
 
 void addLink(char* str);
-int hasItem(char* str);
+bool hasItem(char* str);
 void cleanupLinks();
 void toLower(char* str);
 
 void appendBuf(char* str);
 void cleanupBuffer();
-int readLine(FILE *file, char* buffer, int maxSize);
-int isEmptyLine(char* str);
+bool readLine(FILE *file, char* buffer, int maxSize);
+bool isEmptyLine(char* str);
 void strRemove(char* str, int start, int n);
 
 //declare variables for a link-list
@@ -138,7 +138,7 @@ int main(int argc, char** argv) {
 	return 0;
 }
 
-int readLine(FILE *file, char* buffer, int maxSize) {
+bool readLine(FILE *file, char* buffer, int maxSize) {
 	int i = 0;
 	char curChar;
 	while ((curChar = fgetc(file)) != EOF && curChar != '\n' && i < (maxSize - 1)) {
@@ -289,7 +289,7 @@ void addLink(char* str) {
 	links[linksEnd++] = str;
 }
 
-int hasItem(char* str) {
+bool hasItem(char* str) {
 	for (int i = 0; i < linksEnd; i++)
 		if (!strcmp(links[i], str))
 			return true;
@@ -329,7 +329,7 @@ void cleanupBuffer() {
 	free(outputBuffer);
 }
 
-int isEmptyLine(char* str) {
+bool isEmptyLine(char* str) {
 	for ( ; *str; str++) {
 		if ((unsigned char) *str > 32)
 			return false;
