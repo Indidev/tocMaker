@@ -1,4 +1,4 @@
-# tocMaker
+# tocMaker [![Coverity Scan Build Status](https://scan.coverity.com/projects/6410/badge.svg)](https://scan.coverity.com/projects/indidev-tocmaker)
 creates a table of contents for your github readme file.
 
 The following table of contents is created by this tool:
