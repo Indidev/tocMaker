@@ -140,9 +140,10 @@ int main(int argc, char** argv) {
 
 bool readLine(FILE *file, char* buffer, int maxSize) {
 	int i = 0;
-	char curChar;
+	int curChar;
 	while ((curChar = fgetc(file)) != EOF && curChar != '\n' && i < (maxSize - 1)) {
-		buffer[i] = curChar;
+		if (curChar >= 0 && curChar <= 255)
+			buffer[i] = (char) curChar;
 		i++;
 	}
 	buffer[i] = '\0';
