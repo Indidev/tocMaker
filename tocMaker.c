@@ -99,6 +99,11 @@ int main(int argc, char** argv) {
 				fprintf(file, "%s\n", outputBuffer[i]);
 				i++;
 			}
+			if (i >= buffEnd) {
+				printf("Error: could not create table of content, due to missing ##$headline.\n");
+				printf("Please note, that at least one headline with two # should be present to create a table of content.\n");
+				return 1;
+			}
 
 			//create toc:
 
